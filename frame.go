@@ -27,3 +27,19 @@ func (f Frame) FuncName() string {
 	}
 	return fn.Name()
 }
+
+type FrameInfo struct {
+	Func string `json:"func"`
+	File string `json:"file"`
+	Line int    `json:"line"`
+}
+
+func (f Frame) FrameInfo() FrameInfo {
+	file, line := f.FileLine()
+
+	return FrameInfo{
+		File: file,
+		Line: line,
+		Func: f.FuncName(),
+	}
+}

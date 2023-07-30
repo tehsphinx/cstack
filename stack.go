@@ -19,22 +19,25 @@ func (s Stack) DefaultFormat() string {
 	return s.Format(func(frame Frame) string {
 		file, line := frame.FileLine()
 		fName := frame.FuncName()
-		// TODO: performance test
-		return "  " + fName + "\n    " + file + ":" + strconv.Itoa(line) + "\n"
+		lineStr := strconv.Itoa(line)
+
+		var builder strings.Builder
+		builder.Grow(9 + len(fName) + len(file) + len(lineStr))
+		builder.WriteString("  ")
+		builder.WriteString(fName)
+		builder.WriteString("\n    ")
+		builder.WriteString(file)
+		builder.WriteByte(':')
+		builder.WriteString(lineStr)
+
+		return builder.String()
 	})
 }
 
 func (s Stack) StackInfo() []FrameInfo {
 	frames := make([]FrameInfo, 0, len(s))
 	for _, f := range s {
-		frame := Frame(f)
-		file, line := frame.FileLine()
-
-		frames = append(frames, FrameInfo{
-			File: file,
-			Line: line,
-			Func: frame.FuncName(),
-		})
+		frames = append(frames, Frame(f).FrameInfo())
 	}
 	return frames
 }
