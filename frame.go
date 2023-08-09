@@ -2,6 +2,7 @@ package cstack
 
 import "runtime"
 
+// Frame defines a stack frame.
 type Frame uintptr
 
 // pc returns the program counter for this frame;
@@ -28,12 +29,14 @@ func (f Frame) FuncName() string {
 	return fn.Name()
 }
 
+// FrameInfo defines a stack frames information struct.
 type FrameInfo struct {
 	Func string `json:"func"`
 	File string `json:"file"`
 	Line int    `json:"line"`
 }
 
+// FrameInfo extracts the FrameInfo from a Frame.
 func (f Frame) FrameInfo() FrameInfo {
 	file, line := f.FileLine()
 

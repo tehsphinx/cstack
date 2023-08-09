@@ -5,8 +5,11 @@ import (
 	"strings"
 )
 
+// Stack defines a call stack.
 type Stack []uintptr
 
+// Format formats the Stack applying provided formatting function to each Frame
+// and concatenating the returned strings.
 func (s Stack) Format(f func(Frame) string) string {
 	var b strings.Builder
 	for _, ptr := range []uintptr(s) {
@@ -15,6 +18,7 @@ func (s Stack) Format(f func(Frame) string) string {
 	return b.String()
 }
 
+// DefaultFormat formats the Stack using the implemented default format.
 func (s Stack) DefaultFormat() string {
 	return s.Format(func(frame Frame) string {
 		file, line := frame.FileLine()
@@ -34,6 +38,7 @@ func (s Stack) DefaultFormat() string {
 	})
 }
 
+// StackInfo returns a slice of FrameInfo on the Stack.
 func (s Stack) StackInfo() []FrameInfo {
 	frames := make([]FrameInfo, 0, len(s))
 	for _, f := range s {
