@@ -33,6 +33,7 @@ func (s Stack) DefaultFormat() string {
 		builder.WriteString(file)
 		builder.WriteByte(':')
 		builder.WriteString(lineStr)
+		builder.WriteByte('\n')
 
 		return builder.String()
 	})
